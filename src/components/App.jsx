@@ -64,17 +64,18 @@ export class App extends Component {
 
   render() {
     return (
-      <ContainerStyle>
+      <div>
         <div>
           <Toaster
             toastOptions={{
               style: {
-                padding: '20px',
                 color: '#3f51b5',
               },
             }}
           />
         </div>
+      <ContainerStyle>
+        
         <Searchbar onSubmit={this.onFormSubmit} />
         {this.state.images.length > 0 && (
           <ImageGallery images={this.state.images} />
@@ -84,6 +85,7 @@ export class App extends Component {
           <Button onClick={this.loadMore}>Load more</Button>
         )}
       </ContainerStyle>
+      </div>
     );
   }
 }
