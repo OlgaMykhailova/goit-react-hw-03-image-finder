@@ -17,12 +17,9 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.searchQuery !== this.state.searchQuery ||
-      prevState.page !== this.setState.page
-    ) {
-      const searchQuery = this.state.searchQuery;
-      const page = this.state.page;
+    const searchQuery = this.state.searchQuery;
+    const page = this.state.page;
+    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.loadImages(searchQuery, page);
     }
   }
@@ -32,6 +29,7 @@ export class App extends Component {
       this.setState({
         isLoading: true,
       });
+
       const newImages = await fetchImages(searchQuery, page);
 
       this.setState(prevState => ({
@@ -59,7 +57,6 @@ export class App extends Component {
   };
 
   loadMore = () => {
-    console.log('pressed');
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
@@ -67,8 +64,9 @@ export class App extends Component {
     return (
       <ContainerStyle>
         <Searchbar onSubmit={this.onFormSubmit} />
-        <Loader loading={this.state.isLoading} />
+        
         <ImageGallery images={this.state.images} />
+        <Loader loading={this.state.isLoading} />
         <Button onClick={this.loadMore}>Load more</Button>
       </ContainerStyle>
     );

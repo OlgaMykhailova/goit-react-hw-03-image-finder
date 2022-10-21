@@ -1,9 +1,10 @@
-import PacmanLoader from 'react-spinners/PacmanLoader';
+import PropagateLoader from 'react-spinners/PropagateLoader';
+import {LoaderContainerStyle} from './Loader.styled';
 
 export const Loader = ({loading}) => {
   return (
-    <div>
-      <PacmanLoader color="#36d7b7" loading={loading} speedMultiplier={1} />
-    </div>
+    <LoaderContainerStyle>
+      <PropagateLoader color="#3f51b5" loading={loading} />
+    </LoaderContainerStyle>
   );
 };
