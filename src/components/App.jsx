@@ -64,10 +64,9 @@ export class App extends Component {
     return (
       <ContainerStyle>
         <Searchbar onSubmit={this.onFormSubmit} />
-        
-        <ImageGallery images={this.state.images} />
+        {this.state.images.length>0 && <ImageGallery images={this.state.images} />}
         <Loader loading={this.state.isLoading} />
-        <Button onClick={this.loadMore}>Load more</Button>
+        {this.state.images.length>0 && <Button onClick={this.loadMore}>Load more</Button>}
       </ContainerStyle>
     );
   }
