@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -45,7 +46,8 @@ export class App extends Component {
 
   onFormSubmit = searchQuery => {
     if (searchQuery.trim().length === 0) {
-      alert('Please enter a word for search');
+      console.log('notify');
+      toast('Please enter a word for search');
       return;
     }
 
@@ -63,10 +65,24 @@ export class App extends Component {
   render() {
     return (
       <ContainerStyle>
+        <div>
+          <Toaster
+            toastOptions={{
+              style: {
+                padding: '20px',
+                color: '#3f51b5',
+              },
+            }}
+          />
+        </div>
         <Searchbar onSubmit={this.onFormSubmit} />
-        {this.state.images.length>0 && <ImageGallery images={this.state.images} />}
+        {this.state.images.length > 0 && (
+          <ImageGallery images={this.state.images} />
+        )}
         <Loader loading={this.state.isLoading} />
-        {this.state.images.length>0 && <Button onClick={this.loadMore}>Load more</Button>}
+        {this.state.images.length > 0 && (
+          <Button onClick={this.loadMore}>Load more</Button>
+        )}
       </ContainerStyle>
     );
   }
