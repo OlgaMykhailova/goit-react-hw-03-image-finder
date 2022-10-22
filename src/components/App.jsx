@@ -3,7 +3,6 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-// import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { fetchImages } from './api';
@@ -46,7 +45,6 @@ export class App extends Component {
 
   onFormSubmit = searchQuery => {
     if (searchQuery.trim().length === 0) {
-      console.log('notify');
       toast('Please enter a word for search');
       return;
     }
@@ -63,8 +61,10 @@ export class App extends Component {
   };
 
   render() {
+    const { images } = this.state;
+
     return (
-      <div>
+      <>
         <div>
           <Toaster
             toastOptions={{
@@ -74,18 +74,15 @@ export class App extends Component {
             }}
           />
         </div>
-      <ContainerStyle>
-        
-        <Searchbar onSubmit={this.onFormSubmit} />
-        {this.state.images.length > 0 && (
-          <ImageGallery images={this.state.images} />
-        )}
-        <Loader loading={this.state.isLoading} />
-        {this.state.images.length > 0 && (
-          <Button onClick={this.loadMore}>Load more</Button>
-        )}
-      </ContainerStyle>
-      </div>
+        <ContainerStyle>
+          <Searchbar onSubmit={this.onFormSubmit} />
+          {images.length > 0 && <ImageGallery images={this.state.images} />}
+          <Loader loading={this.state.isLoading} />
+          {images.length > 0 && (
+            <Button onClick={this.loadMore}>Load more</Button>
+          )}
+        </ContainerStyle>
+      </>
     );
   }
 }
