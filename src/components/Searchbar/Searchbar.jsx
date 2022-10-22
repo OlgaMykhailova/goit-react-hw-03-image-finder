@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { PropTypes } from 'prop-types';
 
 import {
   SearchbarStyle,
@@ -48,3 +49,7 @@ export class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onChange: PropTypes.func,
+};
