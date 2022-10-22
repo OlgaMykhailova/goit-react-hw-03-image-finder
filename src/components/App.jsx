@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -32,10 +32,19 @@ export class App extends Component {
 
       const newImages = await fetchImages(searchQuery, page);
 
+      if (newImages.length === 0) {
+        Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
+
       this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
       }));
-    } catch (error) {
+    } catch (error) {Notify.failure(
+      'Something went wrong. Please try again.'
+    );
     } finally {
       this.setState({
         isLoading: false,
@@ -45,7 +54,7 @@ export class App extends Component {
 
   onFormSubmit = searchQuery => {
     if (searchQuery.trim().length === 0) {
-      toast('Please enter a word for search');
+      Notify.warning('Please enter a word for search');
       return;
     }
 
@@ -61,28 +70,17 @@ export class App extends Component {
   };
 
   render() {
-    const { images } = this.state;
+    const { isLoading, images } = this.state;
 
     return (
-      <>
-        <div>
-          <Toaster
-            toastOptions={{
-              style: {
-                color: '#3f51b5',
-              },
-            }}
-          />
-        </div>
-        <ContainerStyle>
-          <Searchbar onSubmit={this.onFormSubmit} />
-          {images.length > 0 && <ImageGallery images={this.state.images} />}
-          <Loader loading={this.state.isLoading} />
-          {images.length > 0 && (
-            <Button onClick={this.loadMore}>Load more</Button>
-          )}
-        </ContainerStyle>
-      </>
+      <ContainerStyle>
+        <Searchbar onSubmit={this.onFormSubmit} />
+        {images.length > 0 && <ImageGallery images={this.state.images} />}
+        <Loader loading={isLoading} />
+        {images.length > 0 && (
+          <Button onClick={this.loadMore}>Load more</Button>
+        )}
+      </ContainerStyle>
     );
   }
 }
