@@ -14,6 +14,7 @@ export class App extends Component {
     searchQuery: '',
     images: [],
     isLoading: false,
+    showButton: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,7 +31,15 @@ export class App extends Component {
         isLoading: true,
       });
 
-      const newImages = await fetchImages(searchQuery, page);
+      const responseData = await fetchImages(searchQuery, page);
+
+      const newImages = responseData.hits.map(
+        ({ id, webformatURL, largeImageURL, tags }) => {
+          const image = { id, webformatURL, largeImageURL, tags };
+          return image;
+        }
+      );
+      console.log(newImages);
 
       if (newImages.length === 0) {
         Notify.failure(
@@ -38,13 +47,15 @@ export class App extends Component {
         );
         return;
       }
+      const numberOfPages = Math.ceil(responseData.total / 12);
+
+      this.setState({showButton: numberOfPages > page ? true : false})
 
       this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
       }));
-    } catch (error) {Notify.failure(
-      'Something went wrong. Please try again.'
-    );
+    } catch (error) {
+      Notify.failure('Something went wrong. Please try again.');
     } finally {
       this.setState({
         isLoading: false,
@@ -70,14 +81,14 @@ export class App extends Component {
   };
 
   render() {
-    const { isLoading, images } = this.state;
+    const { isLoading, images, showButton } = this.state;
 
     return (
       <ContainerStyle>
         <Searchbar onSubmit={this.onFormSubmit} />
         {images.length > 0 && <ImageGallery images={this.state.images} />}
         <Loader loading={isLoading} />
-        {images.length > 0 && (
+        {showButton && (
           <Button onClick={this.loadMore}>Load more</Button>
         )}
       </ContainerStyle>
